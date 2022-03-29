@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"back-usm/internals/core/user/domain"
+	"back-usm/internals/user/core/domain"
 
 	fiber "github.com/gofiber/fiber/v2"
 )
