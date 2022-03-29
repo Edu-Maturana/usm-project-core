@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"back-usm/internals/product/core/domain"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -24,8 +26,8 @@ func NewProductRepository(uri string) (*ProductRepository, error) {
 	}, nil
 }
 
-func (r *ProductRepository) GetAll() ([]struct{}, error) {
-	var products []struct{}
+func (r *ProductRepository) GetAll() ([]domain.Product, error) {
+	var products []domain.Product
 	err := r.db.Table(r.table).Find(&products).Error
 	if err != nil {
 		return nil, err
@@ -34,8 +36,8 @@ func (r *ProductRepository) GetAll() ([]struct{}, error) {
 	return products, nil
 }
 
-func (r *ProductRepository) GetOne(id string) (struct{}, error) {
-	var product struct{}
+func (r *ProductRepository) GetOne(id string) (domain.Product, error) {
+	var product domain.Product
 	err := r.db.Table(r.table).Where("id = ?", id).First(&product).Error
 	if err != nil {
 		return product, err
@@ -44,7 +46,7 @@ func (r *ProductRepository) GetOne(id string) (struct{}, error) {
 	return product, nil
 }
 
-func (r *ProductRepository) Create(product struct{}) (struct{}, error) {
+func (r *ProductRepository) Create(product domain.Product) (domain.Product, error) {
 	err := r.db.Table(r.table).Create(&product).Error
 	if err != nil {
 		return product, err
@@ -53,7 +55,7 @@ func (r *ProductRepository) Create(product struct{}) (struct{}, error) {
 	return product, nil
 }
 
-func (r *ProductRepository) Update(id string, product struct{}) (struct{}, error) {
+func (r *ProductRepository) Update(id string, product domain.Product) (domain.Product, error) {
 	err := r.db.Table(r.table).Where("id = ?", id).Updates(&product).Error
 	if err != nil {
 		return product, err
@@ -63,7 +65,7 @@ func (r *ProductRepository) Update(id string, product struct{}) (struct{}, error
 }
 
 func (r *ProductRepository) Delete(id string) error {
-	err := r.db.Table(r.table).Where("id = ?", id).Delete(&struct{}{}).Error
+	err := r.db.Table(r.table).Where("id = ?", id).Delete(&domain.Product{}).Error
 	if err != nil {
 		return err
 	}

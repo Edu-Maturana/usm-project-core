@@ -7,19 +7,19 @@ import (
 )
 
 type ProductServices interface {
-	GetAllProducts() ([]struct{}, error)
-	GetProduct(id string) (struct{}, error)
-	CreateProduct(product struct{}) (struct{}, error)
-	UpdateProduct(id string, product struct{}) (struct{}, error)
+	GetAllProducts() ([]domain.Product, error)
+	GetProduct(id string) (domain.Product, error)
+	CreateProduct(product domain.Product) (domain.Product, error)
+	UpdateProduct(id string, product domain.Product) (domain.Product, error)
 	DeleteProduct(id string) error
 }
 
 type ProductRepository interface {
-	GetAllProducts() ([]struct{}, error)
-	GetProduct(id string) (struct{}, error)
-	CreateProduct(product struct{}) (struct{}, error)
-	UpdateProduct(id string, product struct{}) (struct{}, error)
-	DeleteProduct(id string) error
+	GetAll() ([]domain.Product, error)
+	GetOne(id string) (domain.Product, error)
+	Create(product domain.Product) (domain.Product, error)
+	Update(id string, product domain.Product) (domain.Product, error)
+	Delete(id string) error
 }
 
 type ProductHandlers struct {
