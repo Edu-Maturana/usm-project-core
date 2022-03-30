@@ -1,7 +1,8 @@
 package services
 
 import (
-	"back-usm/internals/user/core/ports"
+	"back-usm/internals/product/core/domain"
+	"back-usm/internals/product/core/ports"
 )
 
 type ProductServices struct {
@@ -14,8 +15,8 @@ func NewProductServices(repository ports.ProductRepository) *ProductServices {
 	}
 }
 
-func (s *ProductServices) GetAllProducts() ([]struct{}, error) {
-	products, err := s.productRepository.GetAllProducts()
+func (s *ProductServices) GetAllProducts() ([]domain.Product, error) {
+	products, err := s.productRepository.GetAll()
 	if err != nil {
 		return nil, err
 	}
@@ -23,8 +24,8 @@ func (s *ProductServices) GetAllProducts() ([]struct{}, error) {
 	return products, nil
 }
 
-func (s *ProductServices) GetProduct(id string) (struct{}, error) {
-	product, err := s.productRepository.GetProduct(id)
+func (s *ProductServices) GetProduct(id string) (domain.Product, error) {
+	product, err := s.productRepository.GetOne(id)
 	if err != nil {
 		return product, err
 	}
@@ -32,8 +33,8 @@ func (s *ProductServices) GetProduct(id string) (struct{}, error) {
 	return product, nil
 }
 
-func (s *ProductServices) CreateProduct(product struct{}) (struct{}, error) {
-	product, err := s.productRepository.CreateProduct(product)
+func (s *ProductServices) CreateProduct(product domain.Product) (domain.Product, error) {
+	product, err := s.productRepository.Create(product)
 	if err != nil {
 		return product, err
 	}
@@ -41,8 +42,8 @@ func (s *ProductServices) CreateProduct(product struct{}) (struct{}, error) {
 	return product, nil
 }
 
-func (s *ProductServices) UpdateProduct(id string, product struct{}) (struct{}, error) {
-	product, err := s.productRepository.UpdateProduct(id, product)
+func (s *ProductServices) UpdateProduct(id string, product domain.Product) (domain.Product, error) {
+	product, err := s.productRepository.Update(id, product)
 	if err != nil {
 		return product, err
 	}
@@ -51,7 +52,7 @@ func (s *ProductServices) UpdateProduct(id string, product struct{}) (struct{}, 
 }
 
 func (s *ProductServices) DeleteProduct(id string) error {
-	err := s.productRepository.DeleteProduct(id)
+	err := s.productRepository.Delete(id)
 	if err != nil {
 		return err
 	}
