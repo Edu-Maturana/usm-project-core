@@ -8,9 +8,8 @@ import (
 )
 
 type ProductRepository struct {
-	uri   string
-	db    *gorm.DB
-	table string
+	uri string
+	db  *gorm.DB
 }
 
 func NewProductRepository(uri string) (*ProductRepository, error) {
@@ -20,17 +19,16 @@ func NewProductRepository(uri string) (*ProductRepository, error) {
 	}
 
 	return &ProductRepository{
-		uri:   uri,
-		db:    db,
-		table: "products",
+		uri: uri,
+		db:  db,
 	}, nil
 }
 
 func (r *ProductRepository) GetAll() ([]domain.Product, error) {
 	var products []domain.Product
-	err := r.db.Table(r.table).Find(&products).Error
+	err := r.db.Find(&products).Error
 	if err != nil {
-		return nil, err
+		return products, err
 	}
 
 	return products, nil
@@ -38,7 +36,7 @@ func (r *ProductRepository) GetAll() ([]domain.Product, error) {
 
 func (r *ProductRepository) GetOne(id string) (domain.Product, error) {
 	var product domain.Product
-	err := r.db.Table(r.table).Where("id = ?", id).First(&product).Error
+	err := r.db.Where("id = ?", id).First(&product).Error
 	if err != nil {
 		return product, err
 	}
@@ -47,7 +45,7 @@ func (r *ProductRepository) GetOne(id string) (domain.Product, error) {
 }
 
 func (r *ProductRepository) Create(product domain.Product) (domain.Product, error) {
-	err := r.db.Table(r.table).Create(&product).Error
+	err := r.db.Create(&product).Error
 	if err != nil {
 		return product, err
 	}
@@ -56,7 +54,7 @@ func (r *ProductRepository) Create(product domain.Product) (domain.Product, erro
 }
 
 func (r *ProductRepository) Update(id string, product domain.Product) (domain.Product, error) {
-	err := r.db.Table(r.table).Where("id = ?", id).Updates(&product).Error
+	err := r.db.Model(&product).Where("id = ?", id).Updates(&product).Error
 	if err != nil {
 		return product, err
 	}
@@ -65,7 +63,7 @@ func (r *ProductRepository) Update(id string, product domain.Product) (domain.Pr
 }
 
 func (r *ProductRepository) Delete(id string) error {
-	err := r.db.Table(r.table).Where("id = ?", id).Delete(&domain.Product{}).Error
+	err := r.db.Where("id = ?", id).Delete(&domain.Product{}).Error
 	if err != nil {
 		return err
 	}
