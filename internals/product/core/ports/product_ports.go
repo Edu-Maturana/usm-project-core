@@ -3,7 +3,7 @@ package ports
 import (
 	"back-usm/internals/product/core/domain"
 
-	fiber "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2"
 )
 
 type ProductServices interface {
