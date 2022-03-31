@@ -9,12 +9,9 @@ import (
 )
 
 func main() {
-	mySQLuri := utils.GetEnvVar("MYSQL_URI")
-	productRepository, err := repository.NewProductRepository(mySQLuri)
-	if err != nil {
-		panic(err)
-	}
+	dsn := utils.GetEnvVar("DSN")
 
+	productRepository := repository.NewProductRepository(dsn)
 	productService := services.NewProductServices(productRepository)
 	productHandlers := handlers.NewProductHandlers(productService)
 	productServer := server.NewServer(productHandlers)

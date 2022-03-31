@@ -22,10 +22,10 @@ type ProductRepository interface {
 	Delete(id string) error
 }
 
-type ProductHandlers struct {
-	GetAllProducts (ctx *fiber.Ctx) error
-	GetProduct     (ctx *fiber.Ctx) error
-	CreateProduct  (ctx *fiber.Ctx) error
-	UpdateProduct  (ctx *fiber.Ctx) error
-	DeleteProduct  (ctx *fiber.Ctx) error
+type ProductHandlers interface {
+	GetAllProducts(ctx *fiber.Ctx) error
+	GetProduct(ctx *fiber.Ctx) error
+	CreateProduct(ctx *fiber.Ctx) error
+	UpdateProduct(ctx *fiber.Ctx) error
+	DeleteProduct(ctx *fiber.Ctx) error
 }
