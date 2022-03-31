@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	dsn := utils.GetEnvVar("DSN")
+	dsn := utils.GetEnvVar("MYSQL_URI")
 
 	productRepository := repository.NewProductRepository(dsn)
 	productService := services.NewProductServices(productRepository)
