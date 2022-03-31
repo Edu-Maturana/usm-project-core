@@ -2,26 +2,28 @@ package repository
 
 import (
 	"back-usm/internals/product/core/domain"
+	"log"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type ProductRepository struct {
-	uri string
+	dsn string
 	db  *gorm.DB
 }
 
-func NewProductRepository(uri string) (*ProductRepository, error) {
-	db, err := gorm.Open(mysql.Open(uri), &gorm.Config{})
+func NewProductRepository(dsn string) *ProductRepository {
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
+	log.Print("Connected to database")
 	return &ProductRepository{
-		uri: uri,
+		dsn: dsn,
 		db:  db,
-	}, nil
+	}
 }
 
 func (r *ProductRepository) GetAll() ([]domain.Product, error) {
