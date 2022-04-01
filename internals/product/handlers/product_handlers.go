@@ -3,6 +3,7 @@ package handlers
 import (
 	"back-usm/internals/product/core/domain"
 	"back-usm/internals/product/core/ports"
+	"back-usm/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,9 +21,11 @@ func NewProductHandlers(productServices ports.ProductServices) *ProductHandlers 
 func (h *ProductHandlers) GetAllProducts(ctx *fiber.Ctx) error {
 	products, err := h.productServices.GetAllProducts()
 	if err != nil {
-		return err
+		utils.StatusError("404", "GET", "Get all products")
+		return ctx.SendStatus(404)
 	}
 
+	utils.StatusOk("200", "GET", "Get all products")
 	return ctx.JSON(products)
 }
 
@@ -30,23 +33,28 @@ func (h *ProductHandlers) GetProduct(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	product, err := h.productServices.GetProduct(id)
 	if err != nil {
-		return err
+		utils.StatusError("404", "GET", "Get product")
+		return ctx.SendStatus(404)
 	}
 
+	utils.StatusOk("200", "GET", "Get product")
 	return ctx.JSON(product)
 }
 
 func (h *ProductHandlers) CreateProduct(ctx *fiber.Ctx) error {
 	var product domain.Product
 	if err := ctx.BodyParser(&product); err != nil {
-		return err
+		utils.StatusError("400", "POST", "Create product")
+		return ctx.SendStatus(400)
 	}
 
 	product, err := h.productServices.CreateProduct(product)
 	if err != nil {
-		return err
+		utils.StatusError("400", "POST", "Create product")
+		return ctx.SendStatus(400)
 	}
 
+	utils.StatusOk("201", "POST", "Create product")
 	return ctx.JSON(product)
 }
 
@@ -54,23 +62,28 @@ func (h *ProductHandlers) UpdateProduct(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	var product domain.Product
 	if err := ctx.BodyParser(&product); err != nil {
-		return err
+		utils.StatusError("400", "PUT", "Update product")
+		return ctx.SendStatus(400)
 	}
 
 	product, err := h.productServices.UpdateProduct(id, product)
 	if err != nil {
-		return err
+		utils.StatusError("400", "PUT", "Update product")
+		return ctx.SendStatus(400)
 	}
 
-	return ctx.JSON(product)
+	utils.StatusOk("200", "PUT", "Update product")
+	return ctx.JSON("Product updated successfully")
 }
 
 func (h *ProductHandlers) DeleteProduct(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	err := h.productServices.DeleteProduct(id)
 	if err != nil {
-		return err
+		utils.StatusError("400", "DELETE", "Delete product")
+		return ctx.SendStatus(400)
 	}
 
-	return nil
+	utils.StatusOk("200", "DELETE", "Delete product")
+	return ctx.JSON("Product deleted successfully")
 }
