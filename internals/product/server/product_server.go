@@ -33,6 +33,4 @@ func (s *Server) Start() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Println("Server started on port 8080")
 }
