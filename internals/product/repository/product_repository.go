@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type ProductRepository struct {
@@ -14,7 +15,10 @@ type ProductRepository struct {
 }
 
 func NewProductRepository(dsn string) *ProductRepository {
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
+
 	if err != nil {
 		panic(err)
 	}
