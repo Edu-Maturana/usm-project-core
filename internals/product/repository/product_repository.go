@@ -4,6 +4,8 @@ import (
 	"back-usm/internals/product/core/domain"
 	"log"
 
+	"github.com/fatih/color"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -23,7 +25,7 @@ func NewProductRepository(dsn string) *ProductRepository {
 		panic(err)
 	}
 
-	log.Print("Connected to database")
+	log.Print(color.GreenString("Connected to database"))
 	return &ProductRepository{
 		dsn: dsn,
 		db:  db,
