@@ -22,7 +22,7 @@ func (h *ProductHandlers) GetAllProducts(ctx *fiber.Ctx) error {
 	products, err := h.productServices.GetAllProducts()
 	if err != nil {
 		utils.StatusError("404", "GET", "Get all products")
-		return ctx.SendStatus(404)
+		return ctx.Status(404).JSON("Products not found")
 	}
 
 	utils.StatusOk("200", "GET", "Get all products")
@@ -34,28 +34,35 @@ func (h *ProductHandlers) GetProduct(ctx *fiber.Ctx) error {
 	product, err := h.productServices.GetProduct(id)
 	if err != nil {
 		utils.StatusError("404", "GET", "Get product")
-		return ctx.SendStatus(404)
+		return ctx.Status(404).JSON("Product not found")
 	}
 
 	utils.StatusOk("200", "GET", "Get product")
-	return ctx.JSON(product)
+	return ctx.Status(200).JSON(product)
 }
 
 func (h *ProductHandlers) CreateProduct(ctx *fiber.Ctx) error {
 	var product domain.Product
 	if err := ctx.BodyParser(&product); err != nil {
 		utils.StatusError("400", "POST", "Create product")
-		return ctx.SendStatus(400)
+		return ctx.Status(400).JSON("Invalid product")
+	}
+
+	validationError := utils.ValidateData(product)
+	if validationError != nil {
+		utils.StatusError("400", "POST", "Create product")
+		return ctx.Status(400).JSON("Invalid data, all fields are required")
 	}
 
 	product, err := h.productServices.CreateProduct(product)
 	if err != nil {
 		utils.StatusError("400", "POST", "Create product")
-		return ctx.SendStatus(400)
+		return ctx.Status(400).JSON("Invalid product")
 	}
 
 	utils.StatusOk("201", "POST", "Create product")
-	return ctx.JSON(product)
+
+	return ctx.Status(201).JSON(product)
 }
 
 func (h *ProductHandlers) UpdateProduct(ctx *fiber.Ctx) error {
@@ -63,17 +70,17 @@ func (h *ProductHandlers) UpdateProduct(ctx *fiber.Ctx) error {
 	var product domain.Product
 	if err := ctx.BodyParser(&product); err != nil {
 		utils.StatusError("400", "PUT", "Update product")
-		return ctx.SendStatus(400)
+		return ctx.Status(400).JSON("Invalid data")
 	}
 
 	product, err := h.productServices.UpdateProduct(id, product)
 	if err != nil {
 		utils.StatusError("400", "PUT", "Update product")
-		return ctx.SendStatus(400)
+		return ctx.Status(400).JSON("Error updating product")
 	}
 
 	utils.StatusOk("200", "PUT", "Update product")
-	return ctx.JSON("Product updated successfully")
+	return ctx.Status(200).JSON("Product updated successfully")
 }
 
 func (h *ProductHandlers) DeleteProduct(ctx *fiber.Ctx) error {
@@ -81,9 +88,9 @@ func (h *ProductHandlers) DeleteProduct(ctx *fiber.Ctx) error {
 	err := h.productServices.DeleteProduct(id)
 	if err != nil {
 		utils.StatusError("400", "DELETE", "Delete product")
-		return ctx.SendStatus(400)
+		return ctx.Status(400).JSON("Error deleting product")
 	}
 
 	utils.StatusOk("200", "DELETE", "Delete product")
-	return ctx.JSON("Product deleted successfully")
+	return ctx.Status(200).JSON("Product deleted successfully")
 }
