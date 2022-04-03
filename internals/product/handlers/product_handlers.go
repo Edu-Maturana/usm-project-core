@@ -48,6 +48,12 @@ func (h *ProductHandlers) CreateProduct(ctx *fiber.Ctx) error {
 		return ctx.Status(400).JSON("Invalid product")
 	}
 
+	validationError := utils.ValidateData(product)
+	if validationError != nil {
+		utils.StatusError("400", "POST", "Create product")
+		return ctx.Status(400).JSON("Invalid data, all fields are required")
+	}
+
 	product, err := h.productServices.CreateProduct(product)
 	if err != nil {
 		utils.StatusError("400", "POST", "Create product")
@@ -64,13 +70,13 @@ func (h *ProductHandlers) UpdateProduct(ctx *fiber.Ctx) error {
 	var product domain.Product
 	if err := ctx.BodyParser(&product); err != nil {
 		utils.StatusError("400", "PUT", "Update product")
-		return ctx.Status(400).JSON("Invalid product")
+		return ctx.Status(400).JSON("Invalid data")
 	}
 
 	product, err := h.productServices.UpdateProduct(id, product)
 	if err != nil {
 		utils.StatusError("400", "PUT", "Update product")
-		return ctx.Status(400).JSON("Invalid product")
+		return ctx.Status(400).JSON("Error updating product")
 	}
 
 	utils.StatusOk("200", "PUT", "Update product")
