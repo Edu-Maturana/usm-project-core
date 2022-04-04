@@ -4,6 +4,7 @@ import (
 	"back-usm/internals/product/core/ports"
 	"log"
 
+	"github.com/fatih/color"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,7 +19,10 @@ func NewServer(productHandlers ports.ProductHandlers) *Server {
 }
 
 func (s *Server) Start() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: true,
+	})
+
 	api := app.Group("/api/v1")
 
 	productRoutes := api.Group("/products")
@@ -29,8 +33,6 @@ func (s *Server) Start() {
 	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
 	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
 
-	err := app.Listen(":8080")
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Println(color.HiBlueString("Server listening on port 8080"))
+	app.Listen(":8080")
 }
