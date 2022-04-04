@@ -25,7 +25,7 @@ func NewProductRepository(dsn string) *ProductRepository {
 		panic(err)
 	}
 
-	log.Print(color.GreenString("Connected to database"))
+	log.Print(color.GreenString("Connected to products database"))
 	return &ProductRepository{
 		dsn: dsn,
 		db:  db,
