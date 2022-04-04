@@ -5,6 +5,7 @@ type Order struct {
 	CustomerEmail string    `json:"customer_email" validate:"required, email"`
 	Products      []Product `json:"products" validate:"required"`
 	Status        string    `json:"status" enum:"pending,confirmed,rejected" validate:"required"`
+	Total         int64     `json:"total" validate:"required"`
 	CreatedAt     string    `json:"created_at"`
 }
 
