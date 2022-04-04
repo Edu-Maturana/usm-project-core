@@ -16,12 +16,11 @@ import (
 
 func main() {
 	// DSNs databases
-	productsDB := utils.GetEnvVar("MYSQL_PRODUCTS_DSN")
-	ordersDB := utils.GetEnvVar("MYSQL_ORDERS_DSN")
+	dsn := utils.GetEnvVar("DSN")
 
 	// Repositories
-	productRepository := product_repository.NewProductRepository(productsDB)
-	orderRepository := order_repository.NewOrderRepository(ordersDB)
+	productRepository := product_repository.NewProductRepository(dsn)
+	orderRepository := order_repository.NewOrderRepository(dsn)
 
 	// Services
 	productService := product_services.NewProductServices(productRepository)
