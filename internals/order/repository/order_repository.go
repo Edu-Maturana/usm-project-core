@@ -25,7 +25,7 @@ func NewOrderRepository(dsn string) *OrderRepository {
 		panic(err)
 	}
 
-	log.Print(color.GreenString("Connected to database"))
+	log.Print(color.GreenString("Connected to orders database"))
 	return &OrderRepository{
 		dsn: dsn,
 		db:  db,
