@@ -21,10 +21,8 @@ func NewOrderHandlers(orderServices ports.OrderServices) *OrderHandlers {
 func (h *OrderHandlers) GetAllOrders(ctx *fiber.Ctx) error {
 	orders, err := h.orderServices.GetAllOrders()
 	if err != nil {
-		utils.StatusError("404", "GET", "Get all orders")
 		return ctx.Status(404).JSON("Orders not found")
 	}
-	utils.StatusOk("200", "GET", "Get all orders")
 	return ctx.JSON(orders)
 }
 
@@ -32,31 +30,27 @@ func (h *OrderHandlers) GetOrder(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	order, err := h.orderServices.GetOrder(id)
 	if err != nil {
-		utils.StatusError("404", "GET", "Get order")
 		return ctx.Status(404).JSON("Order not found")
 	}
-	utils.StatusOk("200", "GET", "Get order")
+
 	return ctx.JSON(order)
 }
 
 func (h *OrderHandlers) CreateOrder(ctx *fiber.Ctx) error {
 	var order domain.Order
 	if err := ctx.BodyParser(&order); err != nil {
-		utils.StatusError("400", "POST", "Create order")
 		return ctx.Status(400).JSON("Invalid order")
 	}
 
 	validationError := utils.ValidateData(order)
 	if validationError != nil {
-		utils.StatusError("400", "POST", "Create order")
 		return ctx.Status(400).JSON("Invalid data, all fields are required")
 	}
 	order, err := h.orderServices.CreateOrder(order)
 	if err != nil {
-		utils.StatusError("400", "POST", "Create order")
 		return ctx.Status(400).JSON("Invalid order")
 	}
-	utils.StatusOk("200", "POST", "Create order")
+
 	return ctx.JSON(order)
 }
 
@@ -64,22 +58,19 @@ func (h *OrderHandlers) UpdateOrder(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	var order domain.Order
 	if err := ctx.BodyParser(&order); err != nil {
-		utils.StatusError("400", "PUT", "Update order")
 		return ctx.Status(400).JSON("Invalid order")
 	}
 
 	validationError := utils.ValidateData(order)
 	if validationError != nil {
-		utils.StatusError("400", "PUT", "Update order")
 		return ctx.Status(400).JSON("Invalid data, all fields are required")
 	}
 
 	order, err := h.orderServices.UpdateOrder(id, order)
 	if err != nil {
-		utils.StatusError("400", "PUT", "Update order")
 		return ctx.Status(400).JSON("Invalid order")
 	}
-	utils.StatusOk("200", "PUT", "Update order")
+
 	return ctx.JSON(order)
 }
 
@@ -87,9 +78,8 @@ func (h *OrderHandlers) DeleteOrder(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	err := h.orderServices.DeleteOrder(id)
 	if err != nil {
-		utils.StatusError("404", "DELETE", "Delete order")
 		return ctx.Status(404).JSON("Order not found")
 	}
-	utils.StatusOk("200", "DELETE", "Delete order")
+
 	return ctx.JSON("Order deleted")
 }
