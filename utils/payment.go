@@ -12,7 +12,6 @@ func Payment(ctx *fiber.Ctx) error {
 	var order domain.Order
 	err := ctx.BodyParser(&order)
 	if err != nil {
-		StatusError("400", "POST", "Payment")
 		return ctx.Status(400).JSON("Invalid order")
 	}
 
@@ -26,10 +25,8 @@ func Payment(ctx *fiber.Ctx) error {
 	})
 
 	if err != nil {
-		StatusError("400", "POST", "Payment")
 		return ctx.Status(400).JSON(err)
 	}
 
-	StatusOk("200", "POST", "Payment")
 	return ctx.Status(200).JSON("Payment successful")
 }
