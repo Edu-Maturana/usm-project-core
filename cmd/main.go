@@ -15,7 +15,6 @@ import (
 )
 
 func main() {
-	// DSNs databases
 	dsn := utils.GetEnvVar("DSN")
 
 	// Repositories

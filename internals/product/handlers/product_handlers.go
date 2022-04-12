@@ -50,7 +50,7 @@ func (h *ProductHandlers) CreateProduct(ctx *fiber.Ctx) error {
 
 	product, err := h.productServices.CreateProduct(product)
 	if err != nil {
-		return ctx.Status(400).JSON("Invalid product")
+		return ctx.Status(400).JSON(err)
 	}
 
 	return ctx.Status(201).JSON(product)

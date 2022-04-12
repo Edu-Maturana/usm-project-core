@@ -3,8 +3,6 @@ package services
 import (
 	"back-usm/internals/product/core/domain"
 	"back-usm/internals/product/core/ports"
-
-	"github.com/rs/xid"
 )
 
 type ProductServices struct {
@@ -36,8 +34,6 @@ func (s *ProductServices) GetProduct(id string) (domain.Product, error) {
 }
 
 func (s *ProductServices) CreateProduct(product domain.Product) (domain.Product, error) {
-	product.ID = xid.New().String()[0:8]
-
 	product, err := s.productRepository.Create(product)
 	if err != nil {
 		return product, err

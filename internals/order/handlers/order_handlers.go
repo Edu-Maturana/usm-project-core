@@ -39,7 +39,7 @@ func (h *OrderHandlers) GetOrder(ctx *fiber.Ctx) error {
 func (h *OrderHandlers) CreateOrder(ctx *fiber.Ctx) error {
 	var order domain.Order
 	if err := ctx.BodyParser(&order); err != nil {
-		return ctx.Status(400).JSON("Invalid order")
+		return ctx.Status(400).JSON(err)
 	}
 
 	validationError := utils.ValidateData(order)
@@ -48,7 +48,7 @@ func (h *OrderHandlers) CreateOrder(ctx *fiber.Ctx) error {
 	}
 	order, err := h.orderServices.CreateOrder(order)
 	if err != nil {
-		return ctx.Status(400).JSON("Invalid order")
+		return ctx.Status(400).JSON(err)
 	}
 
 	return ctx.JSON(order)
