@@ -3,9 +3,6 @@ package services
 import (
 	"back-usm/internals/order/core/domain"
 	"back-usm/internals/order/core/ports"
-	"time"
-
-	"github.com/rs/xid"
 )
 
 type OrderServices struct {
@@ -37,9 +34,6 @@ func (s *OrderServices) GetOrder(id string) (domain.Order, error) {
 }
 
 func (s *OrderServices) CreateOrder(order domain.Order) (domain.Order, error) {
-	order.ID = xid.New().String()
-	order.CreatedAt = time.Now().String()
-
 	order, err := s.orderRepository.Create(order)
 	if err != nil {
 		return domain.Order{}, err

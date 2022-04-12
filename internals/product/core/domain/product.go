@@ -1,10 +1,12 @@
 package domain
 
+import "gorm.io/gorm"
+
 type Product struct {
-	ID          string `json:"id"`
-	Name        string `json:"name" validate:"required"`
-	Description string `json:"description" validate:"required"`
-	Image       string `json:"image" validate:"required,url"`
-	Stock       uint8  `json:"stock" validate:"required,gte=0"`
-	Price       uint16 `json:"price" validate:"required,gte=0"`
+	Name        string `gorm:"type:varchar(100)" json:"name" validate:"required"`
+	Description string `gorm:"type:varchar(255)" json:"description" validate:"required"`
+	Image       string `gorm:"type:varchar(100)" json:"image" validate:"required"`
+	Stock       uint8  `gorm:"type:tinyint(2)" json:"stock" validate:"required"`
+	Price       uint16 `gorm:"type:smallint(2)" json:"price" validate:"required"`
+	gorm.Model
 }
