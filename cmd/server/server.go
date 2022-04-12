@@ -48,6 +48,6 @@ func (s *Server) Start() {
 	orderRoutes.Put("/:id", s.orderHandlers.UpdateOrder)
 	orderRoutes.Delete("/:id", s.orderHandlers.DeleteOrder)
 
-	log.Println(color.HiBlueString("Server listening on port 8080"))
+	log.Println(color.BlueString("Server listening on port 8080"))
 	app.Listen(":8080")
 }
