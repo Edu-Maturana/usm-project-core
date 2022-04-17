@@ -34,6 +34,10 @@ func (s *OrderServices) GetOrder(id string) (domain.Order, error) {
 }
 
 func (s *OrderServices) CreateOrder(order domain.Order) (domain.Order, error) {
+	for _, item := range order.OrderItems {
+		order.Total += int32(item.Price) * int32(item.Quantity)
+	}
+
 	order, err := s.orderRepository.Create(order)
 	if err != nil {
 		return domain.Order{}, err

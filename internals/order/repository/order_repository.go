@@ -25,6 +25,9 @@ func NewOrderRepository(dsn string) *OrderRepository {
 		panic(err)
 	}
 
+	db.AutoMigrate(domain.Order{})
+	db.AutoMigrate(domain.OrderItem{})
+
 	log.Print(color.GreenString("Orders repository connected to database"))
 	return &OrderRepository{
 		dsn: dsn,

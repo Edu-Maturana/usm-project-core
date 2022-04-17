@@ -25,6 +25,8 @@ func NewProductRepository(dsn string) *ProductRepository {
 		panic(err)
 	}
 
+	db.AutoMigrate(domain.Product{})
+
 	log.Print(color.GreenString("Products repository connected to database"))
 	return &ProductRepository{
 		dsn: dsn,
