@@ -79,13 +79,3 @@ func (r *AuthRepository) Delete(id string) error {
 
 	return nil
 }
-
-func (r *AuthRepository) Login(email string, password string) (domain.Admin, error) {
-	var admin domain.Admin
-	err := r.db.Where("email = ? AND password = ?", email, password).First(&admin).Error
-	if err != nil {
-		return admin, err
-	}
-
-	return admin, nil
-}
