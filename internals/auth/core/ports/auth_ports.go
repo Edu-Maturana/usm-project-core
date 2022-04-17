@@ -12,8 +12,6 @@ type AuthRepository interface {
 	Create(admin domain.Admin) (domain.Admin, error)
 	Update(admin domain.Admin) (domain.Admin, error)
 	Delete(id string) error
-	Login(admin domain.Admin) (domain.Admin, error)
-	ActivateAccount(admin domain.Admin) (domain.Admin, error)
 }
 
 type AuthServices interface {

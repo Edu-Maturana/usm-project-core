@@ -24,8 +24,8 @@ func (s *AuthServices) GetAllUsers() ([]domain.Admin, error) {
 	return users, nil
 }
 
-func (s *AuthServices) GetOneUser(id string) (domain.Admin, error) {
-	user, err := s.authRepository.GetOne(id)
+func (s *AuthServices) GetOneUser(email string) (domain.Admin, error) {
+	user, err := s.authRepository.GetOne(email)
 	if err != nil {
 		return user, err
 	}
@@ -61,7 +61,7 @@ func (s *AuthServices) DeleteUser(id string) error {
 }
 
 func (s *AuthServices) Login(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.Login(user)
+	user, err := s.authRepository.GetOne(user.Email)
 	if err != nil {
 		return user, err
 	}
@@ -70,7 +70,7 @@ func (s *AuthServices) Login(user domain.Admin) (domain.Admin, error) {
 }
 
 func (s *AuthServices) ActivateAccount(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.ActivateAccount(user)
+	user, err := s.authRepository.Update(user)
 	if err != nil {
 		return user, err
 	}
