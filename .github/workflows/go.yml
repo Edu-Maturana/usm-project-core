@@ -3,7 +3,8 @@ name: Go
 on: push
 
 env:
-  DSN: ${{ secrets.DSN }}
+  TEST: "Test env var"
+  DSN: ${{secrets.DSN}}
 
 jobs:
   build:
@@ -15,6 +16,9 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.17
+    
+    - name: Test env var
+      run: echo $TEST $DSN
 
     - name: Run
       run: go run cmd/main.go
