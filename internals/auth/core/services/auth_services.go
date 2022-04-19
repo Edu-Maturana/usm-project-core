@@ -15,7 +15,7 @@ func NewAuthServices(repository ports.AuthRepository) *AuthServices {
 	}
 }
 
-func (s *AuthServices) GetAllUsers() ([]domain.Admin, error) {
+func (s *AuthServices) GetAllAdmins() ([]domain.Admin, error) {
 	users, err := s.authRepository.GetAll()
 	if err != nil {
 		return nil, err
@@ -24,8 +24,8 @@ func (s *AuthServices) GetAllUsers() ([]domain.Admin, error) {
 	return users, nil
 }
 
-func (s *AuthServices) GetOneUser(email string) (domain.Admin, error) {
-	user, err := s.authRepository.GetOne(email)
+func (s *AuthServices) GetOneAdmin(id string) (domain.Admin, error) {
+	user, err := s.authRepository.GetOne(id)
 	if err != nil {
 		return user, err
 	}
@@ -33,25 +33,25 @@ func (s *AuthServices) GetOneUser(email string) (domain.Admin, error) {
 	return user, nil
 }
 
-func (s *AuthServices) CreateUser(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.Create(user)
+func (s *AuthServices) CreateAdmin(admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.Create(admin)
 	if err != nil {
-		return user, err
+		return admin, err
 	}
 
-	return user, nil
+	return admin, nil
 }
 
-func (s *AuthServices) UpdateUser(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.Update(user)
+func (s *AuthServices) UpdateAdmin(admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.Update(admin)
 	if err != nil {
-		return user, err
+		return admin, err
 	}
 
-	return user, nil
+	return admin, nil
 }
 
-func (s *AuthServices) DeleteUser(id string) error {
+func (s *AuthServices) DeleteAdmin(id string) error {
 	err := s.authRepository.Delete(id)
 	if err != nil {
 		return err
@@ -60,20 +60,20 @@ func (s *AuthServices) DeleteUser(id string) error {
 	return nil
 }
 
-func (s *AuthServices) Login(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.GetOne(user.Email)
+func (s *AuthServices) Login(admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.GetOne(admin.Email)
 	if err != nil {
-		return user, err
+		return admin, err
 	}
 
-	return user, nil
+	return admin, nil
 }
 
-func (s *AuthServices) ActivateAccount(user domain.Admin) (domain.Admin, error) {
-	user, err := s.authRepository.Update(user)
+func (s *AuthServices) ActivateAccount(admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.Update(admin)
 	if err != nil {
-		return user, err
+		return admin, err
 	}
 
-	return user, nil
+	return admin, nil
 }
