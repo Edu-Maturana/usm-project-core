@@ -1,4 +1,4 @@
-name: Go
+name: Testing Workflow
 
 on: push
 
@@ -13,6 +13,6 @@ jobs:
         with:
           go-version: 1.17
       - name: Run
-        env:
+        with:
           DSN: ${{secrets.DSN}}
         run: go run cmd/main.go
