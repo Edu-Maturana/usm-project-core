@@ -3,6 +3,7 @@ package services
 import (
 	"back-usm/internals/auth/core/domain"
 	"back-usm/internals/auth/core/ports"
+	"back-usm/utils"
 )
 
 type AuthServices struct {
@@ -34,6 +35,8 @@ func (s *AuthServices) GetOneAdmin(id string) (domain.Admin, error) {
 }
 
 func (s *AuthServices) CreateAdmin(admin domain.Admin) (domain.Admin, error) {
+	admin.Password, _ = utils.EncryptPassword(admin.Password)
+
 	admin, err := s.authRepository.Create(admin)
 	if err != nil {
 		return admin, err
