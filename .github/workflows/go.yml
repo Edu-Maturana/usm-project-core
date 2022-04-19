@@ -18,7 +18,7 @@ jobs:
         go-version: 1.17
     
     - name: Test env var
-      run: echo $TEST
+      run: echo $TEST $DSN
 
     - name: Run
       run: go run cmd/main.go
