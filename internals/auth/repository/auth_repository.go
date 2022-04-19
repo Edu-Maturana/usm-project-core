@@ -62,8 +62,8 @@ func (r *AuthRepository) Create(admin domain.Admin) (domain.Admin, error) {
 	return admin, nil
 }
 
-func (r *AuthRepository) Update(admin domain.Admin) (domain.Admin, error) {
-	err := r.db.Model(&admin).Updates(&admin).Error
+func (r *AuthRepository) Update(id string, admin domain.Admin) (domain.Admin, error) {
+	err := r.db.Model(&admin).Where("id = ?", id).Updates(&admin).Error
 	if err != nil {
 		return admin, err
 	}
