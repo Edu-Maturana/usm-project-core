@@ -20,8 +20,8 @@ type AuthServices interface {
 	CreateAdmin(admin domain.Admin) (domain.Admin, error)
 	UpdateAdmin(admin domain.Admin) (domain.Admin, error)
 	DeleteAdmin(id string) error
-	Login(admin domain.Admin) (domain.Admin, error)
 	ActivateAccount(admin domain.Admin) (domain.Admin, error)
+	Login(admin domain.Admin) (domain.Admin, error)
 }
 
 type AuthHandlers interface {
@@ -30,6 +30,6 @@ type AuthHandlers interface {
 	CreateAdmin(c *fiber.Ctx) error
 	UpdateAdmin(c *fiber.Ctx) error
 	DeleteAdmin(c *fiber.Ctx) error
+	ActivateAccount(ctx *fiber.Ctx) error
 	Login(ctx *fiber.Ctx) error
-	ActivateAccount(admin domain.Admin) (domain.Admin, error)
 }

@@ -79,6 +79,20 @@ func (h *AuthHandlers) DeleteAdmin(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (h *AuthHandlers) ActivateAccount(c *fiber.Ctx) error {
+	var admin domain.Admin
+	if err := c.BodyParser(&admin); err != nil {
+		return c.Status(400).JSON("Invalid credentials")
+	}
+
+	admin, err := h.authServices.ActivateAccount(admin)
+	if err != nil {
+		return c.Status(400).JSON("Error activating account")
+	}
+
+	return c.JSON("Account activated")
+}
+
 func (h *AuthHandlers) Login(c *fiber.Ctx) error {
 	var admin domain.Admin
 	if err := c.BodyParser(&admin); err != nil {
@@ -91,18 +105,4 @@ func (h *AuthHandlers) Login(c *fiber.Ctx) error {
 	}
 
 	return c.JSON("Login successful")
-}
-
-func (h *AuthHandlers) ActivateAccount(c *fiber.Ctx) error {
-	var admin domain.Admin
-	if err := c.BodyParser(&admin); err != nil {
-		return c.Status(400).JSON("Invalid credentials")
-	}
-
-	admin, err := h.authServices.ActivateAccount(admin)
-	if err != nil {
-		return c.Status(400).JSON("Invalid credentials")
-	}
-
-	return c.Status(200).JSON("Account activated")
 }
