@@ -9,7 +9,7 @@ type Order struct {
 	CustomerEmail   string      `gorm:"type:varchar(100)" json:"customer_email" validate:"required"`
 	CustomerAddress string      `gorm:"type:varchar(100)" json:"customer_address" validate:"required"`
 	OrderItems      []OrderItem `gorm:"foreignkey:OrderID" json:"order_items" validate:"required"`
-	Status          string      `gorm:"type:varchar(100)" json:"status" default:"pending" enum:"pending,confirmed,paid,rejected"`
+	Status          string      `gorm:"type:varchar(100) default:pending" json:"status" enum:"pending,confirmed,paid,rejected"`
 	Total           int32       `json:"total"`
 	gorm.Model
 }
