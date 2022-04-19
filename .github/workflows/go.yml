@@ -1,9 +1,11 @@
 name: Go
 
-on:
-  pull_request:
-     branches: 
-      - 'feat/*'
+on: push
+
+env:
+  TEST: "Test env var"
+  DSN: ${{secrets.DSN}}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +16,9 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.17
+    
+    - name: Test env var
+      run: echo $TEST
 
     - name: Run
       run: go run cmd/main.go
