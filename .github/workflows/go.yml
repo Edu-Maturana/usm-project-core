@@ -1,9 +1,10 @@
 name: Go
 
-on:
-  pull_request:
-     branches: 
-      - 'feat/*'
+on: push
+
+env:
+  DSN: ${{ secrets.DSN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
