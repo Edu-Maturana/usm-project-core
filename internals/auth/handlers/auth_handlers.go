@@ -2,17 +2,17 @@ package handlers
 
 import (
 	"back-usm/internals/auth/core/domain"
-	"back-usm/internals/auth/core/services"
+	"back-usm/internals/auth/core/ports"
 	"back-usm/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type AuthHandlers struct {
-	authServices services.AuthServices
+	authServices ports.AuthServices
 }
 
-func NewAuthHandlers(authServices services.AuthServices) *AuthHandlers {
+func NewAuthHandlers(authServices ports.AuthServices) *AuthHandlers {
 	return &AuthHandlers{
 		authServices: authServices,
 	}
