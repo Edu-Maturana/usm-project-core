@@ -34,6 +34,7 @@ func (s *OrderServices) GetOrder(id string) (domain.Order, error) {
 }
 
 func (s *OrderServices) CreateOrder(order domain.Order) (domain.Order, error) {
+	order.Total = 0
 	for _, item := range order.OrderItems {
 		order.Total += int32(item.Price) * int32(item.Quantity)
 	}
