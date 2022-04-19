@@ -1,8 +1,9 @@
 package server
 
 import (
-	order_ports "back-usm/internals/order/core/ports"
-	products_port "back-usm/internals/product/core/ports"
+	auth "back-usm/internals/auth/core/ports"
+	order "back-usm/internals/order/core/ports"
+	products "back-usm/internals/product/core/ports"
 	"log"
 
 	"github.com/fatih/color"
@@ -11,14 +12,16 @@ import (
 )
 
 type Server struct {
-	productHandlers products_port.ProductHandlers
-	orderHandlers   order_ports.OrderHandlers
+	authHandlers    auth.AuthHandlers
+	orderHandlers   order.OrderHandlers
+	productHandlers products.ProductHandlers
 }
 
-func NewServer(productHandlers products_port.ProductHandlers, orderHandlers order_ports.OrderHandlers) *Server {
+func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers) *Server {
 	return &Server{
-		productHandlers: productHandlers,
-		orderHandlers:   orderHandlers,
+		authHandlers:    auth,
+		orderHandlers:   orders,
+		productHandlers: products,
 	}
 }
 
@@ -33,20 +36,30 @@ func (s *Server) Start() {
 
 	api := app.Group("/api/v1")
 
-	productRoutes := api.Group("/products")
+	authRoutes := api.Group("/auth")
 	orderRoutes := api.Group("/orders")
+	productRoutes := api.Group("/products")
 
-	productRoutes.Get("/", s.productHandlers.GetAllProducts)
-	productRoutes.Get("/:id", s.productHandlers.GetProduct)
-	productRoutes.Post("/", s.productHandlers.CreateProduct)
-	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
-	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
+	authRoutes.Get("/admins", s.authHandlers.GetAllAdmins)
+	authRoutes.Get("/admins/:id", s.authHandlers.GetOneAdmin)
+	authRoutes.Post("/admins", s.authHandlers.CreateAdmin)
+	authRoutes.Put("/admins/:id", s.authHandlers.UpdateAdmin)
+	authRoutes.Delete("/admins/:id", s.authHandlers.DeleteAdmin)
+
+	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
+	authRoutes.Post("/login", s.authHandlers.Login)
 
 	orderRoutes.Get("/", s.orderHandlers.GetAllOrders)
 	orderRoutes.Get("/:id", s.orderHandlers.GetOrder)
 	orderRoutes.Post("/", s.orderHandlers.CreateOrder)
 	orderRoutes.Put("/:id", s.orderHandlers.UpdateOrder)
 	orderRoutes.Delete("/:id", s.orderHandlers.DeleteOrder)
+
+	productRoutes.Get("/", s.productHandlers.GetAllProducts)
+	productRoutes.Get("/:id", s.productHandlers.GetProduct)
+	productRoutes.Post("/", s.productHandlers.CreateProduct)
+	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
+	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
 
 	log.Println(color.BlueString("Server listening on port 8080"))
 	app.Listen(":8080")
