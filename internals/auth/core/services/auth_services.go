@@ -42,8 +42,8 @@ func (s *AuthServices) CreateAdmin(admin domain.Admin) (domain.Admin, error) {
 	return admin, nil
 }
 
-func (s *AuthServices) UpdateAdmin(admin domain.Admin) (domain.Admin, error) {
-	admin, err := s.authRepository.Update(admin)
+func (s *AuthServices) UpdateAdmin(id string, admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.Update(id, admin)
 	if err != nil {
 		return admin, err
 	}
@@ -60,8 +60,8 @@ func (s *AuthServices) DeleteAdmin(id string) error {
 	return nil
 }
 
-func (s *AuthServices) ActivateAccount(admin domain.Admin) (domain.Admin, error) {
-	admin, err := s.authRepository.Update(admin)
+func (s *AuthServices) ActivateAccount(id string, admin domain.Admin) (domain.Admin, error) {
+	admin, err := s.authRepository.Update(id, admin)
 	if err != nil {
 		return admin, err
 	}

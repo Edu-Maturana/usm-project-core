@@ -57,16 +57,18 @@ func (h *AuthHandlers) CreateAdmin(c *fiber.Ctx) error {
 
 func (h *AuthHandlers) UpdateAdmin(c *fiber.Ctx) error {
 	var admin domain.Admin
+	id := c.Params("id")
+
 	if err := c.BodyParser(&admin); err != nil {
 		return c.Status(400).JSON("Invalid admin")
 	}
 
-	admin, err := h.authServices.UpdateAdmin(admin)
+	admin, err := h.authServices.UpdateAdmin(id, admin)
 	if err != nil {
 		return c.Status(400).JSON("Error updating admin")
 	}
 
-	return c.Status(200).JSON(admin)
+	return c.Status(200).JSON("Admin updated")
 }
 
 func (h *AuthHandlers) DeleteAdmin(c *fiber.Ctx) error {
@@ -76,21 +78,23 @@ func (h *AuthHandlers) DeleteAdmin(c *fiber.Ctx) error {
 		return c.Status(400).JSON("Error deleting admin")
 	}
 
-	return c.SendStatus(200)
+	return c.Status(200).JSON("Admin deleted")
 }
 
 func (h *AuthHandlers) ActivateAccount(c *fiber.Ctx) error {
 	var admin domain.Admin
+	id := c.Params("id")
+
 	if err := c.BodyParser(&admin); err != nil {
-		return c.Status(400).JSON("Invalid credentials")
+		return c.Status(400).JSON("Invalid admin")
 	}
 
-	admin, err := h.authServices.ActivateAccount(admin)
+	admin, err := h.authServices.ActivateAccount(id, admin)
 	if err != nil {
-		return c.Status(400).JSON("Error activating account")
+		return c.Status(400).JSON("Error activating admin")
 	}
 
-	return c.JSON("Account activated")
+	return c.Status(200).JSON("Account activated")
 }
 
 func (h *AuthHandlers) Login(c *fiber.Ctx) error {

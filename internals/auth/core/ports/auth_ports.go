@@ -10,7 +10,7 @@ type AuthRepository interface {
 	GetAll() ([]domain.Admin, error)
 	GetOne(id string) (domain.Admin, error)
 	Create(admin domain.Admin) (domain.Admin, error)
-	Update(admin domain.Admin) (domain.Admin, error)
+	Update(id string, admin domain.Admin) (domain.Admin, error)
 	Delete(id string) error
 }
 
@@ -18,9 +18,9 @@ type AuthServices interface {
 	GetAllAdmins() ([]domain.Admin, error)
 	GetOneAdmin(id string) (domain.Admin, error)
 	CreateAdmin(admin domain.Admin) (domain.Admin, error)
-	UpdateAdmin(admin domain.Admin) (domain.Admin, error)
+	UpdateAdmin(id string, admin domain.Admin) (domain.Admin, error)
 	DeleteAdmin(id string) error
-	ActivateAccount(admin domain.Admin) (domain.Admin, error)
+	ActivateAccount(id string, admin domain.Admin) (domain.Admin, error)
 	Login(admin domain.Admin) (domain.Admin, error)
 }
 

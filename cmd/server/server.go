@@ -46,7 +46,7 @@ func (s *Server) Start() {
 	authRoutes.Put("/admins/:id", s.authHandlers.UpdateAdmin)
 	authRoutes.Delete("/admins/:id", s.authHandlers.DeleteAdmin)
 
-	authRoutes.Put("/activate", s.authHandlers.ActivateAccount)
+	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
 
 	orderRoutes.Get("/", s.orderHandlers.GetAllOrders)
