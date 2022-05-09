@@ -9,3 +9,7 @@ type Admin struct {
 	Active   bool   `gorm:"default:false" json:"active"`
 	gorm.Model
 }
+
+type User struct {
+	Admin
+}
