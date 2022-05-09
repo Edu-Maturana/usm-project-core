@@ -26,13 +26,7 @@ jobs:
           go-version: 1.17
 
       - name: Create .env file
-        run: touch .env
-      
-      - name: Add dsn
-        run: echo DSN=ci-user:ci-password@tcp(localhost:3307)/local?charset=utf8mb4&parseTime=True&loc=Local >> .env
-      
-      - name: Add jwt secret key
-        run: echo JWT_SECRET=secret >> .env
-
+        run: touch .env && echo DSN=ci-user:ci-password@tcp(localhost:3307)/local?charset=utf8mb4&parseTime=True&loc=Local >> .env && echo JWT_SECRET=secret >> .env
+        
       - name: Run
         run: go run cmd/main.go
