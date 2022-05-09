@@ -43,9 +43,9 @@ func (r *AuthRepository) GetAll() ([]domain.Admin, error) {
 	return admins, nil
 }
 
-func (r *AuthRepository) GetOne(id string) (domain.Admin, error) {
+func (r *AuthRepository) GetOne(email string) (domain.Admin, error) {
 	var admin domain.Admin
-	err := r.db.Where("id = ?", id).First(&admin).Error
+	err := r.db.Where("email = ?", email).First(&admin).Error
 	if err != nil {
 		return admin, err
 	}

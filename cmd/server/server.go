@@ -41,10 +41,10 @@ func (s *Server) Start() {
 	productRoutes := api.Group("/products")
 
 	authRoutes.Get("/admins", s.authHandlers.GetAllAdmins)
-	authRoutes.Get("/admins/:id", s.authHandlers.GetOneAdmin)
+	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
 	authRoutes.Post("/admins", s.authHandlers.CreateAdmin)
-	authRoutes.Put("/admins/:id", s.authHandlers.UpdateAdmin)
-	authRoutes.Delete("/admins/:id", s.authHandlers.DeleteAdmin)
+	authRoutes.Put("/admins/:email", s.authHandlers.UpdateAdmin)
+	authRoutes.Delete("/admins/:email", s.authHandlers.DeleteAdmin)
 
 	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
