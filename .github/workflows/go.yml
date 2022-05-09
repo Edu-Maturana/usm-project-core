@@ -1,4 +1,4 @@
-name: Testing Workflow
+name: CI Workflow
 
 on: push
 
@@ -8,6 +8,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup MySQL
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3307
+          container port: 3306
+          character set server: "utf8"
+          collation server: "utf8_general_ci"
+          mysql version: "8.0"
+          mysql database: "local"
+          mysql user: "ci-user"
+          mysql password: "ci-password"
+
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
@@ -15,8 +27,12 @@ jobs:
 
       - name: Create .env file
         run: touch .env
-          echo DSN=${{ secrets.API_KEY }} >> .env
-          cat .env
+      
+      - name: Add dsn
+        run: echo DSN=ci-user:ci-password@tcp(localhost:3307)/local?charset=utf8mb4&parseTime=True&loc=Local >> .env
+      
+      - name: Add jwt secret key
+        run: echo JWT_SECRET=secret >> .env
 
       - name: Run
         run: go run cmd/main.go
