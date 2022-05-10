@@ -25,8 +25,8 @@ func (s *AuthServices) GetAllAdmins() ([]domain.Admin, error) {
 	return users, nil
 }
 
-func (s *AuthServices) GetOneAdmin(id string) (domain.Admin, error) {
-	user, err := s.authRepository.GetOne(id)
+func (s *AuthServices) GetOneAdmin(email string) (domain.Admin, error) {
+	user, err := s.authRepository.GetOne(email)
 	if err != nil {
 		return user, err
 	}
@@ -34,15 +34,15 @@ func (s *AuthServices) GetOneAdmin(id string) (domain.Admin, error) {
 	return user, nil
 }
 
-func (s *AuthServices) CreateAdmin(admin domain.Admin) (domain.Admin, error) {
-	admin.Password, _ = utils.EncryptPassword(admin.Password)
+func (s *AuthServices) CreateAdmin(newAdmin domain.Admin) (domain.Admin, error) {
+	newAdmin.Password, _ = utils.EncryptPassword(newAdmin.Password)
 
-	admin, err := s.authRepository.Create(admin)
+	newAdmin, err := s.authRepository.Create(newAdmin)
 	if err != nil {
-		return admin, err
+		return newAdmin, err
 	}
 
-	return admin, nil
+	return newAdmin, nil
 }
 
 func (s *AuthServices) UpdateAdmin(id string, admin domain.Admin) (domain.Admin, error) {

@@ -43,9 +43,9 @@ func (r *AuthRepository) GetAll() ([]domain.Admin, error) {
 	return admins, nil
 }
 
-func (r *AuthRepository) GetOne(id string) (domain.Admin, error) {
+func (r *AuthRepository) GetOne(email string) (domain.Admin, error) {
 	var admin domain.Admin
-	err := r.db.Where("id = ?", id).First(&admin).Error
+	err := r.db.Where("email = ?", email).First(&admin).Error
 	if err != nil {
 		return admin, err
 	}
@@ -62,8 +62,8 @@ func (r *AuthRepository) Create(admin domain.Admin) (domain.Admin, error) {
 	return admin, nil
 }
 
-func (r *AuthRepository) Update(id string, admin domain.Admin) (domain.Admin, error) {
-	err := r.db.Model(&admin).Where("id = ?", id).Updates(&admin).Error
+func (r *AuthRepository) Update(email string, admin domain.Admin) (domain.Admin, error) {
+	err := r.db.Model(&admin).Where("email = ?", email).Updates(&admin).Error
 	if err != nil {
 		return admin, err
 	}
@@ -71,8 +71,8 @@ func (r *AuthRepository) Update(id string, admin domain.Admin) (domain.Admin, er
 	return admin, nil
 }
 
-func (r *AuthRepository) Delete(id string) error {
-	err := r.db.Where("id = ?", id).Delete(&domain.Admin{}).Error
+func (r *AuthRepository) Delete(email string) error {
+	err := r.db.Where("email = ?", email).Delete(&domain.Admin{}).Error
 	if err != nil {
 		return err
 	}

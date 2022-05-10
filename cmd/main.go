@@ -6,6 +6,7 @@ import (
 	product_services "back-usm/internals/product/core/services"
 
 	auth_handlers "back-usm/internals/auth/handlers"
+	auth_middlewares "back-usm/internals/auth/handlers/middlewares"
 	order_handlers "back-usm/internals/order/handlers"
 	product_handlers "back-usm/internals/product/handlers"
 
@@ -30,13 +31,16 @@ func main() {
 	orderService := order_services.NewOrderServices(orderRepository)
 	productService := product_services.NewProductServices(productRepository)
 
+	// Middlewares
+	authMiddlewares := auth_middlewares.NewAuthHandlers(authServices)
+
 	// Handlers
 	authHandlers := auth_handlers.NewAuthHandlers(authServices)
 	orderHandlers := order_handlers.NewOrderHandlers(orderService)
 	productHandlers := product_handlers.NewProductHandlers(productService)
 
 	// Server
-	server := server.NewServer(authHandlers, orderHandlers, productHandlers)
+	server := server.NewServer(authHandlers, orderHandlers, productHandlers, authMiddlewares)
 
 	// Init
 	server.Start()

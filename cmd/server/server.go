@@ -15,13 +15,15 @@ type Server struct {
 	authHandlers    auth.AuthHandlers
 	orderHandlers   order.OrderHandlers
 	productHandlers products.ProductHandlers
+	authMiddlewares auth.AuthMiddlewares
 }
 
-func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers) *Server {
+func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
 	return &Server{
 		authHandlers:    auth,
 		orderHandlers:   orders,
 		productHandlers: products,
+		authMiddlewares: authMiddlewares,
 	}
 }
 
@@ -41,10 +43,10 @@ func (s *Server) Start() {
 	productRoutes := api.Group("/products")
 
 	authRoutes.Get("/admins", s.authHandlers.GetAllAdmins)
-	authRoutes.Get("/admins/:id", s.authHandlers.GetOneAdmin)
-	authRoutes.Post("/admins", s.authHandlers.CreateAdmin)
-	authRoutes.Put("/admins/:id", s.authHandlers.UpdateAdmin)
-	authRoutes.Delete("/admins/:id", s.authHandlers.DeleteAdmin)
+	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
+	authRoutes.Post("/admins", s.authMiddlewares.VerifyIfAdminIsNew, s.authHandlers.CreateAdmin)
+	authRoutes.Put("/admins/:email", s.authHandlers.UpdateAdmin)
+	authRoutes.Delete("/admins/:email", s.authHandlers.DeleteAdmin)
 
 	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
