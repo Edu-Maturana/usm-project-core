@@ -15,13 +15,15 @@ type Server struct {
 	authHandlers    auth.AuthHandlers
 	orderHandlers   order.OrderHandlers
 	productHandlers products.ProductHandlers
+	authMiddlewares auth.AuthMiddlewares
 }
 
-func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers) *Server {
+func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
 	return &Server{
 		authHandlers:    auth,
 		orderHandlers:   orders,
 		productHandlers: products,
+		authMiddlewares: authMiddlewares,
 	}
 }
 

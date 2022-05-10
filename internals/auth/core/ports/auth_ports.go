@@ -33,3 +33,8 @@ type AuthHandlers interface {
 	ActivateAccount(ctx *fiber.Ctx) error
 	Login(ctx *fiber.Ctx) error
 }
+
+type AuthMiddlewares interface {
+	VerifyIfAdminExists(ctx *fiber.Ctx) error
+	VerifyIfAdminIsNew(ctx *fiber.Ctx) error
+}
