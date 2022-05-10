@@ -44,7 +44,7 @@ func (s *Server) Start() {
 
 	authRoutes.Get("/admins", s.authHandlers.GetAllAdmins)
 	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
-	authRoutes.Post("/admins", s.authHandlers.CreateAdmin)
+	authRoutes.Post("/admins", s.authMiddlewares.VerifyIfAdminIsNew, s.authHandlers.CreateAdmin)
 	authRoutes.Put("/admins/:email", s.authHandlers.UpdateAdmin)
 	authRoutes.Delete("/admins/:email", s.authHandlers.DeleteAdmin)
 

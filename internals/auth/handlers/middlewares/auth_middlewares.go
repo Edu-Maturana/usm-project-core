@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"back-usm/internals/auth/core/domain"
 	"back-usm/internals/auth/core/ports"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,10 +28,11 @@ func (m *AuthMiddlewares) VerifyIfAdminExists(ctx *fiber.Ctx) error {
 }
 
 func (m *AuthMiddlewares) VerifyIfAdminIsNew(ctx *fiber.Ctx) error {
-	email := ctx.Params("email")
-	_, err := m.authServices.GetOneAdmin(email)
+	var admin domain.Admin
+	ctx.BodyParser(&admin)
+	_, err := m.authServices.GetOneAdmin(admin.Email)
 	if err == nil {
-		return ctx.Status(404).JSON("Admin already exists")
+		return ctx.Status(400).JSON("Admin already exists")
 	}
 
 	return ctx.Next()
