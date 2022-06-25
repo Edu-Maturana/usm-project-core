@@ -4,6 +4,10 @@ import (
 	"back-usm/internals/auth/core/domain"
 	"back-usm/internals/auth/core/ports"
 	"back-usm/utils"
+	"fmt"
+	"time"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type AuthServices struct {
@@ -79,4 +83,21 @@ func (s *AuthServices) Login(admin domain.Admin) (domain.Admin, error) {
 	}
 
 	return admin, nil
+}
+
+func (s *AuthServices) GenerateToken(email string, id int) (string, error) {
+	claims := jwt.MapClaims{
+		"ID":    id,
+		"email": email,
+		"exp":   time.Now().AddDate(1, 0, 0), // 1 year of duration
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return "", fmt.Errorf("Error generating token")
+	}
+
+	return t, nil
 }

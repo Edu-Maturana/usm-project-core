@@ -108,5 +108,13 @@ func (h *AuthHandlers) Login(c *fiber.Ctx) error {
 		return c.Status(400).JSON("Invalid credentials")
 	}
 
-	return c.JSON("Login successful")
+	token, err := h.authServices.GenerateToken(admin.Email, int(admin.ID))
+	if err != nil {
+		return c.Status(400).JSON(err)
+	}
+
+	return c.JSON(map[string]string{
+		"message": "Login succesful",
+		"token":   token,
+	})
 }
