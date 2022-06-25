@@ -45,7 +45,7 @@ func (s *Server) Start() {
 	orderRoutes := api.Group("/orders")
 	productRoutes := api.Group("/products")
 
-	authRoutes.Get("/admins", s.authHandlers.GetAllAdmins)
+	authRoutes.Get("/admins", s.authMiddlewares.ValidateToken, s.authHandlers.GetAllAdmins)
 	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
 	authRoutes.Post("/admins", s.authMiddlewares.VerifyIfAdminIsNew, s.authHandlers.CreateAdmin)
 	authRoutes.Put("/admins/:email", s.authHandlers.UpdateAdmin)

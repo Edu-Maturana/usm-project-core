@@ -5,6 +5,7 @@ import (
 	"back-usm/internals/auth/core/ports"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type AuthMiddlewares struct {
@@ -33,6 +34,23 @@ func (m *AuthMiddlewares) VerifyIfAdminIsNew(ctx *fiber.Ctx) error {
 	_, err := m.authServices.GetOneAdmin(admin.Email)
 	if err == nil {
 		return ctx.Status(400).JSON("Admin already exists")
+	}
+
+	return ctx.Next()
+}
+
+func (m *AuthMiddlewares) ValidateToken(ctx *fiber.Ctx) error {
+	token := ctx.FormValue("token")
+	if token == "" {
+		return ctx.Status(400).JSON("There is not token")
+	}
+
+	bytes, _ := jwt.Parse(token, nil)
+	claims := bytes.Claims.(jwt.MapClaims)
+
+	_, err := m.authServices.GetOneAdmin(claims["email"].(string))
+	if err != nil {
+		return ctx.Status(400).JSON("Unauthorized")
 	}
 
 	return ctx.Next()
