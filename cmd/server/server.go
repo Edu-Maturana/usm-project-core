@@ -2,6 +2,7 @@ package server
 
 import (
 	auth "back-usm/internals/auth/core/ports"
+	comments "back-usm/internals/comments/core/ports"
 	products "back-usm/internals/product/core/ports"
 	"log"
 
@@ -12,16 +13,22 @@ import (
 )
 
 type Server struct {
-	authHandlers    auth.AuthHandlers
-	productHandlers products.ProductHandlers
-	authMiddlewares auth.AuthMiddlewares
+	authHandlers     auth.AuthHandlers
+	productHandlers  products.ProductHandlers
+	commentsHandlers comments.CommentHandlers
+	authMiddlewares  auth.AuthMiddlewares
 }
 
-func NewServer(auth auth.AuthHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
+func NewServer(
+	auth auth.AuthHandlers,
+	products products.ProductHandlers,
+	comments comments.CommentHandlers,
+	authMiddlewares auth.AuthMiddlewares) *Server {
 	return &Server{
-		authHandlers:    auth,
-		productHandlers: products,
-		authMiddlewares: authMiddlewares,
+		authHandlers:     auth,
+		productHandlers:  products,
+		commentsHandlers: comments,
+		authMiddlewares:  authMiddlewares,
 	}
 }
 
@@ -40,6 +47,7 @@ func (s *Server) Start() {
 
 	authRoutes := api.Group("/auth")
 	productRoutes := api.Group("/products")
+	commentRoutes := api.Group("/comments")
 
 	authRoutes.Get("/admins", s.authMiddlewares.ValidateToken, s.authHandlers.GetAllAdmins)
 	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
@@ -55,6 +63,10 @@ func (s *Server) Start() {
 	productRoutes.Post("/", s.productHandlers.CreateProduct)
 	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
 	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
+
+	commentRoutes.Get("/", s.commentsHandlers.FindAllComments)
+	commentRoutes.Post("/", s.commentsHandlers.CreateComment)
+	commentRoutes.Delete("/:id", s.commentsHandlers.DeleteComment)
 
 	log.Println(color.BlueString("Server listening on port 8080"))
 	app.Listen(":8080")
