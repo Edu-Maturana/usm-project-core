@@ -2,7 +2,7 @@ package server
 
 import (
 	auth "back-usm/internals/auth/core/ports"
-	order "back-usm/internals/order/core/ports"
+	comments "back-usm/internals/comments/core/ports"
 	products "back-usm/internals/product/core/ports"
 	"log"
 
@@ -13,18 +13,22 @@ import (
 )
 
 type Server struct {
-	authHandlers    auth.AuthHandlers
-	orderHandlers   order.OrderHandlers
-	productHandlers products.ProductHandlers
-	authMiddlewares auth.AuthMiddlewares
+	authHandlers     auth.AuthHandlers
+	productHandlers  products.ProductHandlers
+	commentsHandlers comments.CommentHandlers
+	authMiddlewares  auth.AuthMiddlewares
 }
 
-func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
+func NewServer(
+	auth auth.AuthHandlers,
+	products products.ProductHandlers,
+	comments comments.CommentHandlers,
+	authMiddlewares auth.AuthMiddlewares) *Server {
 	return &Server{
-		authHandlers:    auth,
-		orderHandlers:   orders,
-		productHandlers: products,
-		authMiddlewares: authMiddlewares,
+		authHandlers:     auth,
+		productHandlers:  products,
+		commentsHandlers: comments,
+		authMiddlewares:  authMiddlewares,
 	}
 }
 
@@ -42,8 +46,8 @@ func (s *Server) Start() {
 	api := app.Group("/api/v1")
 
 	authRoutes := api.Group("/auth")
-	orderRoutes := api.Group("/orders")
 	productRoutes := api.Group("/products")
+	commentRoutes := api.Group("/comments")
 
 	authRoutes.Get("/admins", s.authMiddlewares.ValidateToken, s.authHandlers.GetAllAdmins)
 	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
@@ -54,17 +58,15 @@ func (s *Server) Start() {
 	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
 
-	orderRoutes.Get("/", s.orderHandlers.GetAllOrders)
-	orderRoutes.Get("/:id", s.orderHandlers.GetOrder)
-	orderRoutes.Post("/", s.orderHandlers.CreateOrder)
-	orderRoutes.Put("/:id", s.orderHandlers.UpdateOrder)
-	orderRoutes.Delete("/:id", s.orderHandlers.DeleteOrder)
-
 	productRoutes.Get("/", s.productHandlers.GetAllProducts)
 	productRoutes.Get("/:id", s.productHandlers.GetProduct)
 	productRoutes.Post("/", s.productHandlers.CreateProduct)
 	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
 	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
+
+	commentRoutes.Get("/", s.commentsHandlers.FindAllComments)
+	commentRoutes.Post("/", s.commentsHandlers.CreateComment)
+	commentRoutes.Delete("/:id", s.commentsHandlers.DeleteComment)
 
 	log.Println(color.BlueString("Server listening on port 8080"))
 	app.Listen(":8080")
