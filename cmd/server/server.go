@@ -2,7 +2,6 @@ package server
 
 import (
 	auth "back-usm/internals/auth/core/ports"
-	order "back-usm/internals/order/core/ports"
 	products "back-usm/internals/product/core/ports"
 	"log"
 
@@ -14,15 +13,13 @@ import (
 
 type Server struct {
 	authHandlers    auth.AuthHandlers
-	orderHandlers   order.OrderHandlers
 	productHandlers products.ProductHandlers
 	authMiddlewares auth.AuthMiddlewares
 }
 
-func NewServer(auth auth.AuthHandlers, orders order.OrderHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
+func NewServer(auth auth.AuthHandlers, products products.ProductHandlers, authMiddlewares auth.AuthMiddlewares) *Server {
 	return &Server{
 		authHandlers:    auth,
-		orderHandlers:   orders,
 		productHandlers: products,
 		authMiddlewares: authMiddlewares,
 	}
@@ -42,7 +39,6 @@ func (s *Server) Start() {
 	api := app.Group("/api/v1")
 
 	authRoutes := api.Group("/auth")
-	orderRoutes := api.Group("/orders")
 	productRoutes := api.Group("/products")
 
 	authRoutes.Get("/admins", s.authMiddlewares.ValidateToken, s.authHandlers.GetAllAdmins)
@@ -53,12 +49,6 @@ func (s *Server) Start() {
 
 	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
-
-	orderRoutes.Get("/", s.orderHandlers.GetAllOrders)
-	orderRoutes.Get("/:id", s.orderHandlers.GetOrder)
-	orderRoutes.Post("/", s.orderHandlers.CreateOrder)
-	orderRoutes.Put("/:id", s.orderHandlers.UpdateOrder)
-	orderRoutes.Delete("/:id", s.orderHandlers.DeleteOrder)
 
 	productRoutes.Get("/", s.productHandlers.GetAllProducts)
 	productRoutes.Get("/:id", s.productHandlers.GetProduct)
