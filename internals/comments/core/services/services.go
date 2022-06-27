@@ -2,21 +2,35 @@ package services
 
 import (
 	"back-usm/internals/comments/core/domain"
-	"back-usm/internals/comments/core/ports"
+	commentsPorts "back-usm/internals/comments/core/ports"
+	productsPorts "back-usm/internals/product/core/ports"
+	"fmt"
 )
 
 type CommentServices struct {
-	commentRepository ports.CommentRepository
+	commentRepository commentsPorts.CommentRepository
+	productRepository productsPorts.ProductRepository
 }
 
-func NewCommentServices(repository ports.CommentRepository) *CommentServices {
+func NewCommentServices(repository commentsPorts.CommentRepository, productRepository productsPorts.ProductRepository) *CommentServices {
 	return &CommentServices{
 		commentRepository: repository,
+		productRepository: productRepository,
 	}
 }
 
 func (s *CommentServices) CreateComment(comment *domain.Comment) error {
-	return s.commentRepository.Create(comment)
+	product, _ := s.productRepository.GetOne(fmt.Sprint(comment.ProductId))
+	if product.ID == 0 {
+		return fmt.Errorf("Product not found")
+	}
+
+	err := s.commentRepository.Create(comment)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *CommentServices) FindAllComments(productId string) ([]domain.Comment, error) {
@@ -29,5 +43,10 @@ func (s *CommentServices) FindAllComments(productId string) ([]domain.Comment, e
 }
 
 func (s *CommentServices) DeleteComment(id string) error {
-	return s.commentRepository.Delete(id)
+	err := s.commentRepository.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

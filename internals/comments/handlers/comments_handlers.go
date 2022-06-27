@@ -3,6 +3,7 @@ package handlers
 import (
 	"back-usm/internals/comments/core/domain"
 	"back-usm/internals/comments/core/ports"
+	"back-usm/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -23,8 +24,14 @@ func (h *CommentHandlers) CreateComment(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.commentServices.CreateComment(&comment); err != nil {
-		return err
+	validationError := utils.ValidateData(comment)
+	if validationError != nil {
+		return ctx.Status(400).JSON("Invalid data")
+	}
+
+	err := h.commentServices.CreateComment(&comment)
+	if err != nil {
+		return ctx.Status(404).JSON("Product not found")
 	}
 
 	return ctx.JSON(comment)
@@ -40,7 +47,7 @@ func (h *CommentHandlers) FindAllComments(ctx *fiber.Ctx) error {
 }
 
 func (h *CommentHandlers) DeleteComment(ctx *fiber.Ctx) error {
-	if err := h.commentServices.DeleteComment(ctx.Params("id")); err != nil {
+	if err := h.commentServices.DeleteComment(ctx.Params("productId")); err != nil {
 		return err
 	}
 

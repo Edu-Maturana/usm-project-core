@@ -45,7 +45,7 @@ func (h *ProductHandlers) CreateProduct(ctx *fiber.Ctx) error {
 
 	validationError := utils.ValidateData(product)
 	if validationError != nil {
-		return ctx.Status(400).JSON("Invalid data, all fields are required")
+		return ctx.Status(400).JSON("Invalid data")
 	}
 
 	product, err := h.productServices.CreateProduct(product)
