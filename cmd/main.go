@@ -29,7 +29,7 @@ func main() {
 	// Services
 	authServices := auth_services.NewAuthServices(authRepository)
 	productService := product_services.NewProductServices(productRepository)
-	commentsService := comments_services.NewCommentServices(commentsRepository)
+	commentsService := comments_services.NewCommentServices(commentsRepository, productRepository)
 
 	// Middlewares
 	authMiddlewares := auth_middlewares.NewAuthHandlers(authServices)

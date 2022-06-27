@@ -60,13 +60,13 @@ func (s *Server) Start() {
 
 	productRoutes.Get("/", s.productHandlers.GetAllProducts)
 	productRoutes.Get("/:id", s.productHandlers.GetProduct)
-	productRoutes.Post("/", s.productHandlers.CreateProduct)
+	productRoutes.Post("/", s.authMiddlewares.ValidateToken, s.productHandlers.CreateProduct)
 	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
 	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
 
-	commentRoutes.Get("/", s.commentsHandlers.FindAllComments)
+	commentRoutes.Get("/:productId", s.commentsHandlers.FindAllComments)
 	commentRoutes.Post("/", s.commentsHandlers.CreateComment)
-	commentRoutes.Delete("/:id", s.commentsHandlers.DeleteComment)
+	commentRoutes.Delete("/:productId", s.commentsHandlers.DeleteComment)
 
 	log.Println(color.BlueString("Server listening on port 8080"))
 	app.Listen(":8080")

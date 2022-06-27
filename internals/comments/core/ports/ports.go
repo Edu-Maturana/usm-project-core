@@ -15,7 +15,7 @@ type CommentRepository interface {
 type CommentServices interface {
 	CreateComment(comment *domain.Comment) error
 	FindAllComments(productId string) ([]domain.Comment, error)
-	DeleteComment(id string) error
+	DeleteComment(productId string) error
 }
 
 type CommentHandlers interface {
