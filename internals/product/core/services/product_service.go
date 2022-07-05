@@ -15,8 +15,8 @@ func NewProductServices(repository ports.ProductRepository) *ProductServices {
 	}
 }
 
-func (s *ProductServices) GetAllProducts() ([]domain.Product, error) {
-	products, err := s.productRepository.GetAll()
+func (s *ProductServices) GetAllProducts(priceSort int) ([]domain.Product, error) {
+	products, err := s.productRepository.GetAll(priceSort)
 	if err != nil {
 		return nil, err
 	}

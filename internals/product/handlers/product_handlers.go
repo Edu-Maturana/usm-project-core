@@ -4,6 +4,7 @@ import (
 	"back-usm/internals/product/core/domain"
 	"back-usm/internals/product/core/ports"
 	"back-usm/utils"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -19,7 +20,9 @@ func NewProductHandlers(productServices ports.ProductServices) *ProductHandlers 
 }
 
 func (h *ProductHandlers) GetAllProducts(ctx *fiber.Ctx) error {
-	products, err := h.productServices.GetAllProducts()
+	priceSort, _ := strconv.Atoi(ctx.Query("priceSort"))
+
+	products, err := h.productServices.GetAllProducts(priceSort)
 	if err != nil {
 		return ctx.Status(404).JSON("Products not found")
 	}
