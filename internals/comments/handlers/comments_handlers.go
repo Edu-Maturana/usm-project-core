@@ -37,8 +37,17 @@ func (h *CommentHandlers) CreateComment(ctx *fiber.Ctx) error {
 	return ctx.JSON(comment)
 }
 
-func (h *CommentHandlers) FindAllComments(ctx *fiber.Ctx) error {
-	comments, err := h.commentServices.FindAllComments(ctx.Params("productId"))
+func (h *CommentHandlers) GetAllComments(ctx *fiber.Ctx) error {
+	comments, err := h.commentServices.GetAllComments(ctx.Params("productId"))
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(comments)
+}
+
+func (h *CommentHandlers) GetLastComments(ctx *fiber.Ctx) error {
+	comments, err := h.commentServices.GetLastComments(ctx.Params("productId"))
 	if err != nil {
 		return err
 	}

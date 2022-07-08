@@ -37,9 +37,20 @@ func (r *CommentRepository) Create(comment *domain.Comment) error {
 	return r.db.Create(comment).Error
 }
 
-func (r *CommentRepository) FindAll(productId string) ([]domain.Comment, error) {
+func (r *CommentRepository) GetAll(productId string) ([]domain.Comment, error) {
 	var comments []domain.Comment
-	err := r.db.Where("product_id = ?", productId).Find(&comments).Error
+	err := r.db.Where("product_id = ?", productId).Order("created_at desc").Find(&comments).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return comments, nil
+}
+
+func (r *CommentRepository) GetLast(productId string) ([]domain.Comment, error) {
+	var comments []domain.Comment
+
+	err := r.db.Where("product_id = ?", productId).Order("created_at desc").Limit(3).Find(&comments).Error
 	if err != nil {
 		return nil, err
 	}

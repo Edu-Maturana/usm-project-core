@@ -33,8 +33,17 @@ func (s *CommentServices) CreateComment(comment *domain.Comment) error {
 	return nil
 }
 
-func (s *CommentServices) FindAllComments(productId string) ([]domain.Comment, error) {
-	comments, err := s.commentRepository.FindAll(productId)
+func (s *CommentServices) GetAllComments(productId string) ([]domain.Comment, error) {
+	comments, err := s.commentRepository.GetAll(productId)
+	if err != nil {
+		return nil, err
+	}
+
+	return comments, nil
+}
+
+func (s *CommentServices) GetLastComments(productId string) ([]domain.Comment, error) {
+	comments, err := s.commentRepository.GetLast(productId)
 	if err != nil {
 		return nil, err
 	}
