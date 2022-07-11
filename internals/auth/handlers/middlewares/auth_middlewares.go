@@ -40,7 +40,8 @@ func (m *AuthMiddlewares) VerifyIfAdminIsNew(ctx *fiber.Ctx) error {
 }
 
 func (m *AuthMiddlewares) ValidateToken(ctx *fiber.Ctx) error {
-	token := ctx.FormValue("token")
+	token := ctx.Get("token")
+
 	if token == "" {
 		return ctx.Status(400).JSON("There is not token")
 	}
