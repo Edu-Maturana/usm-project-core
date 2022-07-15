@@ -46,10 +46,14 @@ func (m *AuthMiddlewares) ValidateToken(ctx *fiber.Ctx) error {
 		return ctx.Status(400).JSON("There is not token")
 	}
 
-	bytes, _ := jwt.Parse(token, nil)
+	bytes, err := jwt.Parse(token, nil)
+	if err != nil {
+		return ctx.Status(400).JSON("Invalid token")
+	}
+
 	claims := bytes.Claims.(jwt.MapClaims)
 
-	_, err := m.authServices.GetOneAdmin(claims["email"].(string))
+	_, err = m.authServices.GetOneAdmin(claims["email"].(string))
 	if err != nil {
 		return ctx.Status(400).JSON("Unauthorized")
 	}
