@@ -34,6 +34,10 @@ func (s *ProductServices) GetProduct(id string) (domain.Product, error) {
 }
 
 func (s *ProductServices) CreateProduct(product domain.Product) (domain.Product, error) {
+	if product.Stock == 0 {
+		product.Stock = 100
+	}
+
 	product, err := s.productRepository.Create(product)
 	if err != nil {
 		return product, err
@@ -43,6 +47,10 @@ func (s *ProductServices) CreateProduct(product domain.Product) (domain.Product,
 }
 
 func (s *ProductServices) UpdateProduct(id string, product domain.Product) (domain.Product, error) {
+	if product.Stock == 0 {
+		product.Stock = 100
+	}
+
 	product, err := s.productRepository.Update(id, product)
 	if err != nil {
 		return product, err

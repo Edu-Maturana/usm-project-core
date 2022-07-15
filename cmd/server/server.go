@@ -49,25 +49,53 @@ func (s *Server) Start() {
 	productRoutes := api.Group("/products")
 	commentRoutes := api.Group("/comments")
 
-	authRoutes.Get("/admins", s.authMiddlewares.ValidateToken, s.authHandlers.GetAllAdmins)
-	authRoutes.Get("/admins/:email", s.authHandlers.GetOneAdmin)
-	authRoutes.Post("/admins", s.authMiddlewares.VerifyIfAdminIsNew, s.authHandlers.CreateAdmin)
-	authRoutes.Put("/admins/:email", s.authHandlers.UpdateAdmin)
-	authRoutes.Delete("/admins/:email", s.authHandlers.DeleteAdmin)
+	authRoutes.Get("/admins",
+		s.authMiddlewares.ValidateToken,
+		s.authHandlers.GetAllAdmins,
+	)
+	authRoutes.Get("/admins/:email",
+		s.authMiddlewares.ValidateToken,
+		s.authHandlers.GetOneAdmin,
+	)
+	authRoutes.Post("/admins",
+		s.authMiddlewares.ValidateToken,
+		s.authMiddlewares.VerifyIfAdminIsNew,
+		s.authHandlers.CreateAdmin,
+	)
+	authRoutes.Put("/admins/:email",
+		s.authMiddlewares.ValidateToken,
+		s.authHandlers.UpdateAdmin,
+	)
+	authRoutes.Delete("/admins/:email",
+		s.authMiddlewares.ValidateToken,
+		s.authHandlers.DeleteAdmin,
+	)
 
 	authRoutes.Put("/activate/:id", s.authHandlers.ActivateAccount)
 	authRoutes.Post("/login", s.authHandlers.Login)
 
 	productRoutes.Get("/", s.productHandlers.GetAllProducts)
 	productRoutes.Get("/:id", s.productHandlers.GetProduct)
-	productRoutes.Post("/", s.authMiddlewares.ValidateToken, s.productHandlers.CreateProduct)
-	productRoutes.Put("/:id", s.productHandlers.UpdateProduct)
-	productRoutes.Delete("/:id", s.productHandlers.DeleteProduct)
+	productRoutes.Post("/",
+		s.authMiddlewares.ValidateToken,
+		s.productHandlers.CreateProduct,
+	)
+	productRoutes.Put("/:id",
+		s.authMiddlewares.ValidateToken,
+		s.productHandlers.UpdateProduct,
+	)
+	productRoutes.Delete("/:id",
+		s.authMiddlewares.ValidateToken,
+		s.productHandlers.DeleteProduct,
+	)
 
 	commentRoutes.Get("/:productId", s.commentsHandlers.GetAllComments)
 	commentRoutes.Get("/last/:productId", s.commentsHandlers.GetLastComments)
 	commentRoutes.Post("/", s.commentsHandlers.CreateComment)
-	commentRoutes.Delete("/:productId", s.commentsHandlers.DeleteComment)
+	commentRoutes.Delete("/:productId",
+		s.authMiddlewares.ValidateToken,
+		s.commentsHandlers.DeleteComment,
+	)
 
 	log.Println(color.BlueString("Server running"))
 	app.Listen(":8080")
