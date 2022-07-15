@@ -21,8 +21,9 @@ func NewProductHandlers(productServices ports.ProductServices) *ProductHandlers 
 
 func (h *ProductHandlers) GetAllProducts(ctx *fiber.Ctx) error {
 	priceSort, _ := strconv.Atoi(ctx.Query("priceSort"))
+	limit, _ := strconv.Atoi(ctx.Query("limit"))
 
-	products, err := h.productServices.GetAllProducts(priceSort)
+	products, err := h.productServices.GetAllProducts(priceSort, limit)
 	if err != nil {
 		return ctx.Status(404).JSON("Products not found")
 	}

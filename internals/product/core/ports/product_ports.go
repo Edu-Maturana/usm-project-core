@@ -7,7 +7,7 @@ import (
 )
 
 type ProductRepository interface {
-	GetAll(priceSort int) ([]domain.Product, error)
+	GetAll(priceSort int, limit int) ([]domain.Product, error)
 	GetOne(id string) (domain.Product, error)
 	Create(product domain.Product) (domain.Product, error)
 	Update(id string, product domain.Product) (domain.Product, error)
@@ -15,7 +15,7 @@ type ProductRepository interface {
 }
 
 type ProductServices interface {
-	GetAllProducts(priceSort int) ([]domain.Product, error)
+	GetAllProducts(priceSort int, limit int) ([]domain.Product, error)
 	GetProduct(id string) (domain.Product, error)
 	CreateProduct(product domain.Product) (domain.Product, error)
 	UpdateProduct(id string, product domain.Product) (domain.Product, error)

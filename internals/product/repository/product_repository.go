@@ -34,17 +34,17 @@ func NewProductRepository(dsn string) *ProductRepository {
 	}
 }
 
-func (r *ProductRepository) GetAll(priceSort int) ([]domain.Product, error) {
+func (r *ProductRepository) GetAll(priceSort int, limit int) ([]domain.Product, error) {
 	var products []domain.Product
 
 	if priceSort > 0 {
 		if priceSort == 1 {
-			err := r.db.Order("price ASC").Find(&products).Error
+			err := r.db.Order("price ASC").Limit(limit).Find(&products).Error
 			if err != nil {
 				return nil, err
 			}
 		} else if priceSort == 2 {
-			err := r.db.Order("price DESC").Find(&products).Error
+			err := r.db.Order("price DESC").Limit(limit).Find(&products).Error
 			if err != nil {
 				return nil, err
 			}
@@ -53,11 +53,10 @@ func (r *ProductRepository) GetAll(priceSort int) ([]domain.Product, error) {
 		return products, nil
 	}
 
-	err := r.db.Order("created_at desc").Find(&products).Error
+	err := r.db.Order("created_at DESC").Limit(limit).Find(&products).Error
 	if err != nil {
 		return nil, err
 	}
-
 	return products, nil
 }
 
