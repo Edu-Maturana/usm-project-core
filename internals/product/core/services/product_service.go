@@ -15,8 +15,12 @@ func NewProductServices(repository ports.ProductRepository) *ProductServices {
 	}
 }
 
-func (s *ProductServices) GetAllProducts(priceSort int) ([]domain.Product, error) {
-	products, err := s.productRepository.GetAll(priceSort)
+func (s *ProductServices) GetAllProducts(priceSort int, limit int) ([]domain.Product, error) {
+	if limit == 0 {
+		limit = 6
+	}
+
+	products, err := s.productRepository.GetAll(priceSort, limit)
 	if err != nil {
 		return nil, err
 	}
