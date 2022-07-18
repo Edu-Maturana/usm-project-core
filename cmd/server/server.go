@@ -4,12 +4,10 @@ import (
 	auth "back-usm/internals/auth/core/ports"
 	comments "back-usm/internals/comments/core/ports"
 	products "back-usm/internals/product/core/ports"
-	"back-usm/utils"
 	"log"
 
 	"github.com/fatih/color"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
@@ -34,15 +32,15 @@ func NewServer(
 }
 
 func (s *Server) Start() {
-	environment := utils.GetEnvVar("ENVIRONMENT")
-	frontendSite := ""
-	if environment == "dev" {
-		frontendSite = utils.GetEnvVar("DEV_DOMAIN")
-	} else if environment == "prod" {
-		frontendSite = utils.GetEnvVar("PROD_DOMAIN")
-	} else {
-		log.Fatal("Invalid environment")
-	}
+	// environment := utils.GetEnvVar("ENVIRONMENT")
+	// frontendSite := ""
+	// if environment == "dev" {
+	// 	frontendSite = utils.GetEnvVar("DEV_DOMAIN")
+	// } else if environment == "prod" {
+	// 	frontendSite = utils.GetEnvVar("PROD_DOMAIN")
+	// } else {
+	// 	log.Fatal("Invalid environment")
+	// }
 
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
@@ -52,9 +50,9 @@ func (s *Server) Start() {
 		Format: "${time} ${status} ${method} ${path} ${latency}\n",
 	}))
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: frontendSite,
-	}))
+	// app.Use(cors.New(cors.Config{
+	// 	AllowOrigins: frontendSite,
+	// }))
 
 	api := app.Group("/api/v1")
 
