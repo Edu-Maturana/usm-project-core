@@ -20,6 +20,7 @@ import (
 
 func main() {
 	dsn := utils.GetEnvVar("DSN")
+	port := utils.GetEnvVar("PORT")
 
 	// Repositories
 	authRepository := auth_repository.NewAuthRepository(dsn)
@@ -43,5 +44,5 @@ func main() {
 	server := server.NewServer(authHandlers, productHandlers, commentsHandlers, authMiddlewares)
 
 	// Init
-	server.Start()
+	server.Start(port)
 }

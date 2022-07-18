@@ -32,7 +32,7 @@ func NewServer(
 	}
 }
 
-func (s *Server) Start() {
+func (s *Server) Start(port string) {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
@@ -98,5 +98,5 @@ func (s *Server) Start() {
 	)
 
 	log.Println(color.BlueString("Server running"))
-	app.Listen(":8080")
+	app.Listen(port)
 }
