@@ -111,5 +111,5 @@ func (s *Server) Start(port string) {
 	)
 
 	log.Println(color.BlueString("Server running"))
-	app.Listen(port)
+	app.Listen(":" + port)
 }
