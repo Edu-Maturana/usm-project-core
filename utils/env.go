@@ -7,10 +7,16 @@ import (
 )
 
 func GetEnvVar(key string) string {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("Error loading .env file")
-	}
+	if os.Getenv("ENVIRONMENT") == "dev" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			panic("Error loading .env file")
+		}
 
-	return os.Getenv(key)
+		return os.Getenv(key)
+	} else if os.Getenv("ENVIRONMENT") == "prod" {
+		return os.Getenv(key)
+	} else {
+		panic("Invalid environment")
+	}
 }
