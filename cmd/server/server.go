@@ -4,6 +4,7 @@ import (
 	auth "back-usm/internals/auth/core/ports"
 	comments "back-usm/internals/comments/core/ports"
 	products "back-usm/internals/product/core/ports"
+	"back-usm/utils"
 	"log"
 
 	"github.com/fatih/color"
@@ -33,6 +34,16 @@ func NewServer(
 }
 
 func (s *Server) Start(port string) {
+	environment := utils.GetEnvVar("ENVIRONMENT")
+	frontendSite := ""
+	if environment == "dev" {
+		frontendSite = utils.GetEnvVar("DEV_DOMAIN")
+	} else if environment == "prod" {
+		frontendSite = utils.GetEnvVar("PROD_ENVIRONMENT")
+	} else {
+		log.Fatal("Invalid environment")
+	}
+
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
@@ -41,7 +52,9 @@ func (s *Server) Start(port string) {
 		Format: "${time} ${status} ${method} ${path} ${latency}\n",
 	}))
 
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: frontendSite,
+	}))
 
 	api := app.Group("/api/v1")
 
