@@ -44,5 +44,5 @@ func main() {
 	server := server.NewServer(authHandlers, productHandlers, commentsHandlers, authMiddlewares)
 
 	// Init
-	server.Start(port)
+	server.Start(":" + port)
 }
