@@ -39,7 +39,7 @@ func (s *Server) Start() {
 	if environment == "dev" {
 		frontendSite = utils.GetEnvVar("DEV_DOMAIN")
 	} else if environment == "prod" {
-		frontendSite = utils.GetEnvVar("PROD_ENVIRONMENT")
+		frontendSite = utils.GetEnvVar("PROD_DOMAIN")
 	} else {
 		log.Fatal("Invalid environment")
 	}
